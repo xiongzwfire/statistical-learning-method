@@ -7,7 +7,6 @@ from collections import Counter
 
 
 class KNeighborsClassifier:
-
 	def __init__(self, X_train, y_train, n_neighbors = 5, p = 2):
 		self.X_train = X_train
 		self.y_train = y_train

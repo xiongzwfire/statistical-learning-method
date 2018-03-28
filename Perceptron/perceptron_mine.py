@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.datasets import load_iris
 from random import shuffle
+from sklearn.model_selection import train_test_split
 
 
 class Perceptron:
@@ -27,6 +28,20 @@ class Perceptron:
 				iter_flag = False
 
 		print "Perceptron OK!"
+
+	def predict(self, X_test):
+		label_list = []
+		for X in X_test:
+			label = np.sign(np.dot(self.w, X) + self.b)
+			label = label if label else -1
+			label_list.append(label)
+		return np.array(label_list)
+
+	def score(self, X_test, y_test):
+		total_num = len(X_test)
+		pre = (self.predict(X_test) == y_test).sum()
+		score = pre/total_num
+		return score
 		
 
 if __name__ == "__main__":
@@ -37,10 +52,12 @@ if __name__ == "__main__":
 	xlabel = iris.feature_names[0]
 	ylabel = iris.feature_names[1]
 
-	X_0 = X[:50]
-	X_1 = X[50:]
+	X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
 
-	plt.figure("iris")
+	X_0 = X_train[y_train == -1]
+	X_1 = X_train[y_train == 1]
+
+	plt.figure("perceptron-mine")
 	plt.scatter(X_0[:, 0], X_0[:, 1], label = '-1')
 	plt.scatter(X_1[:, 0], X_1[:, 1], label = '1')
 	plt.xlabel(xlabel)
@@ -49,9 +66,19 @@ if __name__ == "__main__":
 
 	clf = Perceptron(X, y)
 	clf.fit()
+	score = clf.score(X_test, y_test)
+	print "score : %s" % score
+	
+	y_pre = clf.predict(X_test)
+	X_test_pre_0 = X_test[y_pre == -1]
+	X_test_pre_1 = X_test[y_pre == 1]
+	plt.scatter(X_test_pre_0[:, 0], X_test_pre_0[:, 1], color = 'r', label = 'pre -1')
+	plt.scatter(X_test_pre_1[:, 0], X_test_pre_1[:, 1], color = 'k', label = 'pre 1')
+	plt.legend()
+
 	
 	X_simul = np.arange(4, 8)
 	y_simul = -(clf.w[0] * X_simul + clf.b)/clf.w[1]
-	plt.plot(X_simul, y_simul, color = 'red', label = 'model')
+	plt.plot(X_simul, y_simul, color = 'g', label = 'model')
 	plt.legend()
 	plt.show()
