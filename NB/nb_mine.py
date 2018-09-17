@@ -7,7 +7,7 @@ from collections import Counter
 
 
 class GaussianNB:
-	def __init__(self, X_train, y_train, n_neighbors = 5, p = 2):
+	def __init__(self, X_train, y_train):
 		self.X_train = X_train
 		self.y_train = y_train
 		self.get_params()
@@ -59,8 +59,8 @@ if __name__ == "__main__":
 	X_1 = X_train[y_train == 1]
 
 	plt.figure("nb-mine")
-	plt.scatter(X_0[:, 0], X_0[:, 1], label = '-1')
-	plt.scatter(X_1[:, 0], X_1[:, 1], label = '1')
+	plt.scatter(X_0[:, 0], X_0[:, 1], color = 'y', label = '-1')
+	plt.scatter(X_1[:, 0], X_1[:, 1], color = 'b', label = '1')
 	plt.xlabel(xlabel)
 	plt.ylabel(ylabel)
 	plt.legend()
